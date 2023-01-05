@@ -1,8 +1,13 @@
 const github = require('@actions/github');
 const core = require('@actions/core');
 
-const run = () => {
+const octokit = github.getOctokit(
+    process.env.GITHUB_TOKEN
+  );  
 
+const run = () => {
+    let grader = core.getInput('grader-result');
+    console.log(grader);
 };
 
 run();
