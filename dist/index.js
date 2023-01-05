@@ -9687,13 +9687,18 @@ var __webpack_exports__ = {};
 const github = __nccwpck_require__(4611);
 const core = __nccwpck_require__(7833);
 
+const fs = __nccwpck_require__(7147);
+const path = __nccwpck_require__(1017);
+
 const octokit = github.getOctokit(
     process.env.GITHUB_TOKEN
   );  
 
 const run = () => {
-    let grader = core.getInput('grader-result');
-    console.log(grader);
+  let report = fs.readFile("report", {encoding: 'utf-8'}, (err, data) => {
+    return data;
+  });
+  console.log(report);
 };
 
 run();
