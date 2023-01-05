@@ -1,0 +1,5 @@
+name: 'Wizard'
+description: 'Issue reporting based on the GatorGrader automated grading system (AGS)'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
