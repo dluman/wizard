@@ -9689,16 +9689,17 @@ const core = __nccwpck_require__(7833);
 
 const fs = __nccwpck_require__(7147);
 const path = __nccwpck_require__(1017);
+const util = __nccwpck_require__(3837);
 
-const octokit = github.getOctokit(
-    process.env.GITHUB_TOKEN
-  );
+//const octokit = github.getOctokit(
+//    process.env.GITHUB_TOKEN
+//);
 
-const run = () => {
-  let report;
-  fs.readFile("report", {encoding: 'utf-8'}, (err, data) => {
-    console.log(data);
-  });
+const read = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
+
+const run = async () => {
+  let report = await read("report");
+  console.log(report);
 };
 
 run();
