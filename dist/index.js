@@ -14620,6 +14620,7 @@ const cleanLines = (lines) => {
 
 const assignCategory = (obj) => {
   let check;
+  console.log(obj);
   Object.keys(obj).some((key) => {
     if(key == "category") {
       check = {
@@ -14634,7 +14635,6 @@ const assignCategory = (obj) => {
       return check !== undefined;
     }
   });
-  console.log(check);
   return check;
 }
 
