@@ -9692,7 +9692,7 @@ const path = __nccwpck_require__(1017);
 
 const octokit = github.getOctokit(
     process.env.GITHUB_TOKEN
-  );  
+  );
 
 const run = () => {
   let report = fs.readFile("report", {encoding: 'utf-8'}, (err, data) => {

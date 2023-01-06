@@ -6,7 +6,7 @@ const path = require('path');
 
 const octokit = github.getOctokit(
     process.env.GITHUB_TOKEN
-  );  
+  );
 
 const run = () => {
   let report = fs.readFile("report", {encoding: 'utf-8'}, (err, data) => {
