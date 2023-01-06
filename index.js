@@ -35,16 +35,22 @@ const loadGrader = async (checks) => {
 }
 
 async function postIssue(checks) {
-  // Template will come fully-formed
+  let isCreated = await octokit.rest.issues.create({
+    owner: owner,
+    repo: repo,
+    title: "Assignment Progress",
+    body: checks
+  })
+  console.log(isCreated);
 }
 
-const getIssues = async () => {
+const getGradeIssue = async () => {
   console.log(`${owner}/${repo}`)
   let issues = await octokit.rest.issues.listForRepo({
     owner: owner,
     repo: repo
   });
-  console.log(issues);
+  return issues.data;
 }
 
 const cleanLines = (lines) => {
@@ -143,8 +149,9 @@ const run = async () => {
     {checks: grouped}
   );
   // Post issue
-  await getIssues();
-  postIssue(checks);
+  let issue = await getGradeIssue();
+  // FINISH HIM
+  postIssue(rendered);
 };
 
 run();
