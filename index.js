@@ -99,7 +99,7 @@ const run = async () => {
   // Get repository constants
   const repo = github.context.payload.repository.name;
   // Acquire checks from cached file
-  let report = await loadFile(`${home}/work/${repo}/${repo}report`);
+  let report = await loadFile(`${home}/work/${repo}/${repo}/report`);
   let lines = cleanLines(
       report.split("\n")
   );
