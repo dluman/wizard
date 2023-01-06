@@ -14611,11 +14611,12 @@ async function postIssue(checks) {
 }
 
 const getIssues = async () => {
-  let issue = await octokit.rest.issues.listForRepo({
+  console.log(`${owner}/${repo}`)
+  let issues = await octokit.rest.issues.listForRepo({
     owner: owner,
     repo: repo
   });
-  console.log(issue);
+  console.log(issues);
 }
 
 const cleanLines = (lines) => {
