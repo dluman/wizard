@@ -14577,6 +14577,7 @@ const fs = __nccwpck_require__(7147);
 const path = __nccwpck_require__(1017);
 const util = __nccwpck_require__(3837);
 const yaml = __nccwpck_require__(9613);
+const home = (__nccwpck_require__(2037).homedir)();
 
 const Mustache = __nccwpck_require__(9846);
 
@@ -14647,12 +14648,12 @@ const getResult = (lines) => {
   // Separate checks from irrelevant lines
   let checkSymbols = ["✔","✘"]//,"➔","→"];
   let regexp = new RegExp(`(${checkSymbols.join("|")})`,"g");
-  lines = lines.filter(line => !line.search(regexp))
+  lines = lines.filter(line => !line.search(regexp));
   // Sort checks into object
   let checks = {
     "passed": [],
     "failed": []
-  }
+  };
   for(let check of lines) {
     // Get success or failure
     let status = check[0];
@@ -14668,7 +14669,7 @@ const getResult = (lines) => {
 
 const run = async () => {
   // Acquire checks from cached file
-  let report = await loadFile("report");
+  let report = await loadFile(`${homedir}/report`);
   let lines = cleanLines(
       report.split("\n")
   );
