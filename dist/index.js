@@ -14586,18 +14586,18 @@ const mustache = __nccwpck_require__(9846);
 
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
-async function postIssue(checks) {
-  loadTemplate();
-}
-
 const loadTemplate = async () => {
   let template = await loadFile("templates/IssueTemplate.md");
 }
 
-const getCategories = async (checks) => {
+const loadGrader = async (checks) => {
   let definitions = await loadFile(".gatorgrade.yml");
   let data = yaml.load(definitions);
-  console.log(data);
+  return data;
+}
+
+async function postIssue(checks) {
+  loadTemplate();
 }
 
 const cleanLines = (lines) => {
@@ -14609,7 +14609,30 @@ const cleanLines = (lines) => {
   return [...new Set(lines)];
 }
 
-const getChecks = (lines) => {
+const parseCategory = (obj) => {
+  let category;
+  Object.keys(obj).some((key) => {
+    if(key === "category") {
+      category = obj.category;
+      return true;
+    }
+    if(typeof obj[key] === "object"){
+      category = parseCategory(obj[key]);
+      return category !== undefined;
+    }
+  });
+  return category;
+}
+
+const getChecks = (result, grader) => {
+  let checks = {};
+  for(let spec of grader) {
+    let category = parseCategory(spec);
+    console.log(category);
+  }
+}
+
+const getResult = (lines) => {
   // Separate checks from irrelevant lines
   let checkSymbols = ["✔","✘"]//,"➔","→"];
   let regexp = new RegExp(`(${checkSymbols.join("|")})`,"g");
@@ -14638,8 +14661,11 @@ const run = async () => {
   let lines = cleanLines(
       report.split("\n")
   );
-  let checks = getChecks(lines);
-  checks = await getCategories(checks);
+  // Separate parsed checks and grader file
+  let result = getResult(lines);
+  let grader = await loadGrader(result);
+  // Add categories from grader file
+  let checks = getChecks(result, grader);
   // Post issue
   postIssue(checks);
 };
