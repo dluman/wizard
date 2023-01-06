@@ -14685,7 +14685,7 @@ const run = async () => {
   let result = getResult(lines);
   let grader = await loadGrader(result);
   // Add categories from grader file
-  console.log(result);
+  console.log(report);
   console.log(grader);
   let checks = getChecks(result, grader);
   // Get and render template
