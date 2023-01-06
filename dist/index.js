@@ -14591,8 +14591,8 @@ const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
 const loadAndRenderTemplate = async (checks) => {
   let template = await loadFile(
-    //`${process.cwd()}/.github/ISSUE_TEMPLATE/wizard.md`
-    "templates/IssueTemplate.md"
+    `${process.cwd()}/.github/ISSUE_TEMPLATE/wizard.md`
+    // TESTING "templates/IssueTemplate.md"
   );
   let rendered = Mustache.render(template, checks);
   return rendered;
