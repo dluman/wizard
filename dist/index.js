@@ -9695,11 +9695,41 @@ const util = __nccwpck_require__(3837);
 //    process.env.GITHUB_TOKEN
 //);
 
-const read = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
+const readReport = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
+
+const cleanLines = (lines) => {
+  // Remove blanks
+  lines = lines.filter(line => line);
+  // Trim whitespace
+  lines = lines.map(line => line.trim());
+  // Remove duplicates
+  return [...new Set(lines)];
+}
+
+const getChecks = (lines) => {
+  // Separate checks from irrelevant lines
+  let checkSymbols = ["✔","✘","➔","→"];
+  let regexp = new RegExp(`(${checkSymbols.join("|")})`,"g");
+  lines = lines.filter(line => !line.search(regexp))
+  // Sort checks into object
+  let checks = {
+    "passed": [],
+    "failed": []
+  }
+  for(let check of lines) {
+    let status = check[0];
+    if(status == "✔") checks.passed.push(check);
+    else checks.failed.push(check);
+  }
+  return checks;
+}
 
 const run = async () => {
-  let report = await read("report");
-  console.log(report);
+  let report = await readReport("report");
+  let lines = cleanLines(
+      report.split("\n")
+  );
+  console.log(getChecks(lines));
 };
 
 run();
