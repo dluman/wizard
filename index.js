@@ -48,9 +48,9 @@ const cleanLines = (lines) => {
 
 const assignCategory = (obj) => {
   let check;
-  console.log(obj);
   Object.keys(obj).some((key) => {
     if(key == "category") {
+      console.log(key);
       check = {
         "description": obj.description,
         "category": obj.category,
@@ -60,7 +60,7 @@ const assignCategory = (obj) => {
     }
     if(typeof obj[key] === "object"){
       check = assignCategory(obj[key]);
-      return check !== undefined;
+      return check != undefined;
     }
   });
   return check;
