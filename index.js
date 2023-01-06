@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const util = require('util');
 const yaml = require('js-yaml');
+const home = require('os').homedir();
 
 const Mustache = require('mustache');
 
@@ -75,12 +76,12 @@ const getResult = (lines) => {
   // Separate checks from irrelevant lines
   let checkSymbols = ["✔","✘"]//,"➔","→"];
   let regexp = new RegExp(`(${checkSymbols.join("|")})`,"g");
-  lines = lines.filter(line => !line.search(regexp))
+  lines = lines.filter(line => !line.search(regexp));
   // Sort checks into object
   let checks = {
     "passed": [],
     "failed": []
-  }
+  };
   for(let check of lines) {
     // Get success or failure
     let status = check[0];
@@ -96,7 +97,7 @@ const getResult = (lines) => {
 
 const run = async () => {
   // Acquire checks from cached file
-  let report = await loadFile("report");
+  let report = await loadFile(`${homedir}/report`);
   let lines = cleanLines(
       report.split("\n")
   );
