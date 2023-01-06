@@ -80,7 +80,7 @@ const getChecks = (result, grader) => {
 
 const getResult = (lines) => {
   // Separate checks from irrelevant lines
-  let checkSymbols = ["✔","✘"|"✓"|"✕"];//,"➔","→"];
+  let checkSymbols = ["✔","✘","✓","✕"];//,"➔","→"];
   let regexp = new RegExp(`(${checkSymbols.join("|")})`,"g");
   lines = lines.filter(line => !line.search(regexp));
   // Sort checks into object
