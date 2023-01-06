@@ -14585,6 +14585,10 @@ const octokit = github.getOctokit(
   process.env.GITHUB_TOKEN
 );
 
+// Get repository constants
+const repo = github.context.payload.repository.name;
+const baseDir = `${home}/work/${repo}/${repo}`;
+
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
 const loadAndRenderTemplate = async (checks) => {
@@ -14594,7 +14598,9 @@ const loadAndRenderTemplate = async (checks) => {
 }
 
 const loadGrader = async (checks) => {
-  let definitions = await loadFile(".gatorgrade.yml");
+  let definitions = await loadFile(
+    `${baseDir}/.gatorgrade.yml`
+  );
   let data = yaml.load(definitions);
   return data;
 }
@@ -14668,10 +14674,10 @@ const getResult = (lines) => {
 }
 
 const run = async () => {
-  // Get repository constants
-  const repo = github.context.payload.repository.name;
   // Acquire checks from cached file
-  let report = await loadFile(`${home}/work/${repo}/${repo}/report`);
+  let report = await loadFile(
+    `${baseDir}/report`
+  );
   let lines = cleanLines(
       report.split("\n")
   );
