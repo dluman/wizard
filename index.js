@@ -6,7 +6,7 @@ const path = require('path');
 const util = require('util');
 const yaml = require('js-yaml');
 
-const mustache = require('mustache');
+const Mustache = require('mustache');
 
 //const octokit = github.getOctokit(
 //    process.env.GITHUB_TOKEN
@@ -14,8 +14,10 @@ const mustache = require('mustache');
 
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
-const loadTemplate = async () => {
+const loadAndRenderTemplate = async (checks) => {
   let template = await loadFile("templates/IssueTemplate.md");
+  let rendered = Mustache.render(template, {"checks":checks});
+  return rendered;
 }
 
 const loadGrader = async (checks) => {
@@ -25,7 +27,7 @@ const loadGrader = async (checks) => {
 }
 
 async function postIssue(checks) {
-  loadTemplate();
+  // Template will come fully-formed
 }
 
 const cleanLines = (lines) => {
@@ -38,25 +40,35 @@ const cleanLines = (lines) => {
 }
 
 const assignCategory = (obj) => {
-  let category;
+  let check;
   Object.keys(obj).some((key) => {
     if(key == "category") {
-      category = obj.category;
+      check = {
+        "description": obj.description,
+        "category": obj.category,
+        "status": false
+      }
       return true;
     }
     if(typeof obj[key] === "object"){
-      category = parseCategory(obj[key]);
-      return category !== undefined;
+      check = assignCategory(obj[key]);
+      return check !== undefined;
     }
   });
-  return category;
+  return check;
 }
 
 const getChecks = (result, grader) => {
-  let checks = {};
+  let checks = [];
   for(let spec of grader) {
-    let category = assignCategory(spec);
+    let check = assignCategory(spec);
+    checks.push(check);
   }
+  Object.values(checks).some((check) => {
+    if(result.passed.includes(check.description))
+      check.status = true;
+  });
+  return checks;
 }
 
 const getResult = (lines) => {
@@ -93,6 +105,9 @@ const run = async () => {
   let grader = await loadGrader(result);
   // Add categories from grader file
   let checks = getChecks(result, grader);
+  // Get and render template
+  let rendered = await loadAndRenderTemplate(checks);
+  console.log(rendered);
   // Post issue
   postIssue(checks);
 };

@@ -2,14 +2,14 @@
 
 Looks like we've still got some stuff to work on.
 
-{{#items}}
-{{#label}}
-## {{label}}
-{{#issues}}
+{{#checks}}
+{{#category}}
+## {{category}}
+{{#description}}
 - [ ] {{.}}
-{{/issues}}
-{{/label}}
-{{/items}}
+{{/description}}
+{{/category}}
+{{/checks}}
 
 ## Percent complete
 

@@ -14578,7 +14578,7 @@ const path = __nccwpck_require__(1017);
 const util = __nccwpck_require__(3837);
 const yaml = __nccwpck_require__(9613);
 
-const mustache = __nccwpck_require__(9846);
+const Mustache = __nccwpck_require__(9846);
 
 //const octokit = github.getOctokit(
 //    process.env.GITHUB_TOKEN
@@ -14586,8 +14586,10 @@ const mustache = __nccwpck_require__(9846);
 
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
-const loadTemplate = async () => {
+const loadAndRenderTemplate = async (checks) => {
   let template = await loadFile("templates/IssueTemplate.md");
+  let rendered = Mustache.render(template, {"checks":checks});
+  return rendered;
 }
 
 const loadGrader = async (checks) => {
@@ -14597,7 +14599,7 @@ const loadGrader = async (checks) => {
 }
 
 async function postIssue(checks) {
-  loadTemplate();
+  // Template will come fully-formed
 }
 
 const cleanLines = (lines) => {
@@ -14609,27 +14611,36 @@ const cleanLines = (lines) => {
   return [...new Set(lines)];
 }
 
-const parseCategory = (obj) => {
-  let category;
+const assignCategory = (obj) => {
+  let check;
   Object.keys(obj).some((key) => {
-    if(key === "category") {
-      category = obj.category;
+    if(key == "category") {
+      check = {
+        "description": obj.description,
+        "category": obj.category,
+        "status": false
+      }
       return true;
     }
     if(typeof obj[key] === "object"){
-      category = parseCategory(obj[key]);
-      return category !== undefined;
+      check = assignCategory(obj[key]);
+      return check !== undefined;
     }
   });
-  return category;
+  return check;
 }
 
 const getChecks = (result, grader) => {
-  let checks = {};
+  let checks = [];
   for(let spec of grader) {
-    let category = parseCategory(spec);
-    console.log(category);
+    let check = assignCategory(spec);
+    checks.push(check);
   }
+  Object.values(checks).some((check) => {
+    if(result.passed.includes(check.description))
+      check.status = true;
+  });
+  return checks;
 }
 
 const getResult = (lines) => {
@@ -14666,6 +14677,9 @@ const run = async () => {
   let grader = await loadGrader(result);
   // Add categories from grader file
   let checks = getChecks(result, grader);
+  // Get and render template
+  let rendered = await loadAndRenderTemplate(checks);
+  console.log(rendered);
   // Post issue
   postIssue(checks);
 };
