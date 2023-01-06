@@ -14669,7 +14669,7 @@ const getResult = (lines) => {
 
 const run = async () => {
   // Acquire checks from cached file
-  let report = await loadFile(`${homedir}/report`);
+  let report = await loadFile(`${home}/report`);
   let lines = cleanLines(
       report.split("\n")
   );
