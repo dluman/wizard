@@ -13,7 +13,7 @@ const octokit = github.getOctokit(
 );
 
 const repo = github.context.payload.repository.name;
-const owner = github.context.payload.repository.owner;
+const owner = github.context.payload.repository.owner.login;
 
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
