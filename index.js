@@ -16,8 +16,9 @@ const octokit = github.getOctokit(
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
 const loadAndRenderTemplate = async (checks) => {
-  console.log(process.env.GITHUB_ACTION_PATH);
-  let template = await loadFile("templates/IssueTemplate.md");
+  let template = await loadFile(
+    `${process.cwd()}/.github/ISSUE_TEMPLATE/wizard.md`
+  );
   let rendered = Mustache.render(template, {"checks":checks});
   return rendered;
 }
