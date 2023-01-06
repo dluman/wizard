@@ -49,8 +49,8 @@ const cleanLines = (lines) => {
 const assignCategory = (obj) => {
   let check;
   Object.keys(obj).some((key) => {
+    console.log(key);
     if(key == "category") {
-      console.log(key);
       check = {
         "description": obj.description,
         "category": obj.category,
