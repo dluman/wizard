@@ -40,8 +40,8 @@ async function postIssue(checks) {
 
 const getIssues = async () => {
   let issue = await octokit.rest.issues.listForRepo({
-    repo: repo,
-    owner: owner
+    owner: owner,
+    repo: repo
   });
   console.log(issue);
 }
