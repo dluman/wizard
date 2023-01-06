@@ -5,21 +5,21 @@ const fs = require('fs');
 const path = require('path');
 const util = require('util');
 const yaml = require('js-yaml');
-const home = require('os').homedir();
 
 const Mustache = require('mustache');
 
-const octokit = github.getOctokit(
-  process.env.GITHUB_TOKEN
-);
+//const octokit = github.getOctokit(
+//  process.env.GITHUB_TOKEN
+//);
 
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
 const loadAndRenderTemplate = async (checks) => {
   let template = await loadFile(
-    `${process.cwd()}/.github/ISSUE_TEMPLATE/wizard.md`
+    //`${process.cwd()}/.github/ISSUE_TEMPLATE/wizard.md`
+    "templates/IssueTemplate.md"
   );
-  let rendered = Mustache.render(template, {"checks":checks});
+  let rendered = Mustache.render(template, checks);
   return rendered;
 }
 
@@ -49,15 +49,15 @@ const assignCategory = (obj) => {
   Object.keys(obj).some((key) => {
     if(key == "category") {
       check = {
-        "description": obj.description,
         "category": obj.category,
+        "description": obj.description,
         "status": false
       }
       return true;
     }
     if(typeof obj[key] === "object"){
       check = assignCategory(obj[key]);
-      return check != undefined;
+      return check !== undefined;
     }
   });
   return check;
@@ -76,9 +76,22 @@ const getChecks = (result, grader) => {
   return checks;
 }
 
+const groupChecks = (checks) => {
+  return Array.from(
+    checks.reduce((prev, next) => {
+      prev.set(
+        next.category,
+        (prev.get(next.category) || []).concat(next)
+      )
+      return prev
+    }, new Map).entries(),
+    ([category, specifications]) => ({category, specifications})
+  )
+}
+
 const getResult = (lines) => {
   // Separate checks from irrelevant lines
-  let checkSymbols = ["✔","✘","✓","✕"];//,"➔","→"];
+  let checkSymbols = ["✔","✘","✓","✕"]; //,"➔","→"];
   let regexp = new RegExp(`(${checkSymbols.join("|")})`,"g");
   lines = lines.filter(line => !line.search(regexp));
   // Sort checks into object
@@ -112,11 +125,15 @@ const run = async () => {
   let grader = await loadGrader(result);
   // Add categories from grader file
   let checks = getChecks(result, grader);
+  let grouped = groupChecks(checks);
+  console.log(grouped);
   // Get and render template
-  let rendered = await loadAndRenderTemplate(checks);
+  let rendered = await loadAndRenderTemplate(
+    {checks: grouped}
+  );
   console.log(rendered);
   // Post issue
-  postIssue(checks);
+  // postIssue(checks);
 };
 
 run();

@@ -8,6 +8,22 @@
       fragment: "TODO"
       count: 0
       exact: true
+- README.md:
+  - description: TEST
+    category: Documentation
+    check: MatchFileFragment
+    options:
+      fragment: "TODO"
+      count: 0
+      exact: true
+- README.md:
+  - description: ANOTHER TEST
+    category: Documentation
+    check: MatchFileFragment
+    options:
+      fragment: "TODO"
+      count: 0
+      exact: true
 
 # Am I really that commited?
 
