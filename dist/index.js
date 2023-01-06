@@ -14580,9 +14580,12 @@ const yaml = __nccwpck_require__(9613);
 
 const Mustache = __nccwpck_require__(9846);
 
-//const octokit = github.getOctokit(
-//  process.env.GITHUB_TOKEN
-//);
+const octokit = github.getOctokit(
+  process.env.GITHUB_TOKEN
+);
+
+const repo = github.context.payload.repository.name;
+const owner = github.context.payload.repository.owner;
 
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
@@ -14605,6 +14608,14 @@ const loadGrader = async (checks) => {
 
 async function postIssue(checks) {
   // Template will come fully-formed
+}
+
+const getIssues = async () => {
+  let issues = await octokit.rest.issues.getIssues({
+    repo: repo,
+    owner: owner
+  })
+  console.log(issues);
 }
 
 const cleanLines = (lines) => {
@@ -14698,14 +14709,13 @@ const run = async () => {
   // Add categories from grader file
   let checks = getChecks(result, grader);
   let grouped = groupChecks(checks);
-  console.log(grouped);
   // Get and render template
   let rendered = await loadAndRenderTemplate(
     {checks: grouped}
   );
-  console.log(rendered);
   // Post issue
-  // postIssue(checks);
+  await getIssues();
+  postIssue(checks);
 };
 
 run();

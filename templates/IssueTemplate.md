@@ -5,12 +5,14 @@ Looks like we've still got some stuff to work on.
 {{#checks}}
 {{#category}}
 ## {{category}}
+
 {{#specifications}}
 {{#description}}
 - [{{#status}}x{{/status}}] {{.}}
 {{/description}}
 {{/specifications}}
 {{/category}}
+
 {{/checks}}
 
 ## Percent complete
