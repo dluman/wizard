@@ -8,9 +8,9 @@ const yaml = require('js-yaml');
 
 const Mustache = require('mustache');
 
-//const octokit = github.getOctokit(
-//    process.env.GITHUB_TOKEN
-//);
+const octokit = github.getOctokit(
+  process.env.GITHUB_TOKEN
+);
 
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 

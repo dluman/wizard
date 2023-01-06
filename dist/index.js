@@ -14580,9 +14580,9 @@ const yaml = __nccwpck_require__(9613);
 
 const Mustache = __nccwpck_require__(9846);
 
-//const octokit = github.getOctokit(
-//    process.env.GITHUB_TOKEN
-//);
+const octokit = github.getOctokit(
+  process.env.GITHUB_TOKEN
+);
 
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
