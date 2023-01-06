@@ -14665,6 +14665,7 @@ const getResult = (lines) => {
     let status = check[0];
     // Retrieve the body of the check
     let body = check.substring(1).trim();
+    console.log(status);
     if(status == "✔" || status == "✓") checks.passed.push(body);
     // TODO: Really, combine failures into a "check" and annotation
     //       (see above regex commented out)
