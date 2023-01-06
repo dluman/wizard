@@ -14634,6 +14634,7 @@ const assignCategory = (obj) => {
       return check !== undefined;
     }
   });
+  console.log(check);
   return check;
 }
 
@@ -14644,7 +14645,6 @@ const getChecks = (result, grader) => {
     checks.push(check);
   }
   Object.values(checks).some((check) => {
-    console.log(check);
     if(result.passed.includes(check.description))
       check.status = true;
   });
@@ -14666,7 +14666,6 @@ const getResult = (lines) => {
     let status = check[0];
     // Retrieve the body of the check
     let body = check.substring(1).trim();
-    console.log(`${status} ${body}`);
     if(status == "✔" || status == "✓") checks.passed.push(body);
     // TODO: Really, combine failures into a "check" and annotation
     //       (see above regex commented out)
