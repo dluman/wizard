@@ -14592,6 +14592,7 @@ const baseDir = `${home}/work/${repo}/${repo}`;
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
 const loadAndRenderTemplate = async (checks) => {
+  console.log(process.cwd());
   let template = await loadFile("templates/IssueTemplate.md");
   let rendered = Mustache.render(template, {"checks":checks});
   return rendered;
@@ -14621,7 +14622,6 @@ const cleanLines = (lines) => {
 const assignCategory = (obj) => {
   let check;
   Object.keys(obj).some((key) => {
-    console.log(key);
     if(key == "category") {
       check = {
         "description": obj.description,
