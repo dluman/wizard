@@ -80,7 +80,7 @@ const getChecks = (result, grader) => {
 
 const getResult = (lines) => {
   // Separate checks from irrelevant lines
-  let checkSymbols = ["✔","✘"]//,"➔","→"];
+  let checkSymbols = ["✔","✘"|"✓"|"✕"];//,"➔","→"];
   let regexp = new RegExp(`(${checkSymbols.join("|")})`,"g");
   lines = lines.filter(line => !line.search(regexp));
   // Sort checks into object
@@ -113,8 +113,6 @@ const run = async () => {
   let result = getResult(lines);
   let grader = await loadGrader(result);
   // Add categories from grader file
-  console.log(report);
-  console.log(grader);
   let checks = getChecks(result, grader);
   // Get and render template
   let rendered = await loadAndRenderTemplate(checks);
