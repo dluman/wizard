@@ -14585,14 +14585,10 @@ const octokit = github.getOctokit(
   process.env.GITHUB_TOKEN
 );
 
-// Get repository constants
-const repo = github.context.payload.repository.name;
-const baseDir = `${home}/work/${repo}/${repo}`;
-
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
 const loadAndRenderTemplate = async (checks) => {
-  console.log(process.cwd());
+  console.log(process.env.GITHUB_ACTION_PATH);
   let template = await loadFile("templates/IssueTemplate.md");
   let rendered = Mustache.render(template, {"checks":checks});
   return rendered;
@@ -14600,7 +14596,7 @@ const loadAndRenderTemplate = async (checks) => {
 
 const loadGrader = async (checks) => {
   let definitions = await loadFile(
-    `${baseDir}/.gatorgrade.yml`
+    `${process.cwd()}/.gatorgrade.yml`
   );
   let data = yaml.load(definitions);
   return data;
@@ -14677,7 +14673,7 @@ const getResult = (lines) => {
 const run = async () => {
   // Acquire checks from cached file
   let report = await loadFile(
-    `${baseDir}/report`
+    `${process.cwd()}/report`
   );
   let lines = cleanLines(
       report.split("\n")
