@@ -9,10 +9,10 @@ const octokit = github.getOctokit(
   );
 
 const run = () => {
-  let report = fs.readFile("report", {encoding: 'utf-8'}, (err, data) => {
-    return data;
+  let report;
+  fs.readFile("report", {encoding: 'utf-8'}, (err, data) => {
+    console.log(data);
   });
-  console.log(report);
 };
 
 run();
