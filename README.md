@@ -18,25 +18,3 @@ of version control platform or workflow.
 
 Of course, it helps that GitHub is pretty ubiquitous. That written, this project helps to build a transferrable skill that allows students
 to be more ready contributors to their education in computer science.
-
-## Installation requirements
-
-### Software dependencies
-
-* `aiohttp`
-* `gidgethub`
-* `mustache`
-
-### Hardware dependencies
-
-This program requires a high-uptime/availability server to respond to webhook requests from GitHub. We encourage a domain name to resolve to.
-rather than just an IP address. (Because, of course, that seems like you're trying to steal someone's credit card information.)
-
-### GitHub requirements
-
-`wizard` requires an organization-level webhook to the URL endpoint of the application host.
-
-## Running `wizard`
-
-This software is compatible with a number of "daemonizing" applications, with a preference for `pm2` -- the application configuration for
-this platform is included in this repository.
