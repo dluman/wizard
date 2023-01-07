@@ -14597,7 +14597,6 @@ const getTemplateHeader = (content) => {
 const loadAndRenderTemplate = async (checks) => {
   let template = await loadFile(
     `${process.cwd()}/.github/ISSUE_TEMPLATE/wizard.md`
-    // TESTING "templates/IssueTemplate.md"
   );
   // Remove the header from the issue template; it's JANK!
   let body = template.replace(
@@ -14626,7 +14625,6 @@ async function postIssue(checks) {
 }
 
 const getGradeIssue = async () => {
-  console.log(`${owner}/${repo}`)
   let issues = await octokit.rest.issues.listForRepo({
     owner: owner,
     repo: repo
@@ -14712,9 +14710,9 @@ const getResult = (lines) => {
 }
 
 const run = async () => {
-  // Acquire checks from cached file
-  let report = await loadFile(
-    `${process.cwd()}/report`
+  // Acquire checks from running process
+  const {stdout, report} = await exec(
+    "gatorgrade --config .gatorgrade.yml"
   );
   let lines = cleanLines(
       report.split("\n")
