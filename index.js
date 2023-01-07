@@ -19,7 +19,7 @@ const {spawn} = require('child_process');
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
 const getTemplateHeader = (content) => {
-  let header = /---[a-zA-Z:'\s]+---/.exec(content);
+  let header = /(?!---)[a-zA-Z:'\s]+(?!---)/.exec(content);
   console.log(header);
   let parsed = yaml.load(header);
   return parsed;

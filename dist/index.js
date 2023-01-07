@@ -14599,7 +14599,7 @@ const {spawn} = __nccwpck_require__(2081);
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
 const getTemplateHeader = (content) => {
-  let header = /---[a-zA-Z:'\s]+---/.exec(content);
+  let header = /(?!---)[a-zA-Z:'\s]+(?!---)/.exec(content);
   console.log(header);
   let parsed = yaml.load(header);
   return parsed;
