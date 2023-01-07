@@ -50,7 +50,15 @@ async function postIssue(checks) {
     title: "Assignment Progress",
     body: checks
   })
-  console.log(isCreated);
+}
+
+async function updateIssue(checks, id) {
+  let isUpdated = await octokit.rest.issues.update({
+    owner: owner,
+    repo: repo,
+    issue_number: id,
+    body: checks
+  })
 }
 
 const getGradeIssue = async () => {
@@ -58,7 +66,10 @@ const getGradeIssue = async () => {
     owner: owner,
     repo: repo
   });
-  return issues.data;
+  for(let issue of issues.data) {
+    if(issue.title == "Assignment Progress")
+      return issue.id;
+  }
 }
 
 const cleanLines = (lines) => {
@@ -156,10 +167,10 @@ const run = async () => {
     {checks: grouped}
   );
   // Discover previously-created issues
-  let issues = await getGradeIssue();
-  console.log(issues);
+  let issue = await getGradeIssue();
   // FINISH HIM
-  postIssue(rendered);
+  if(issue) postIssue(rendered)
+  else updateIssue(rendered, issue)
 };
 
 run();
