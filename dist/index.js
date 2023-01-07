@@ -14627,6 +14627,7 @@ const getLatestAuthor = async () => {
     owner: owner,
     repo: repo
   });
+  console.log(info);
   return info.data[info.data.length - 1].author;
 };
 
