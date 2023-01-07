@@ -149,7 +149,7 @@ const getResult = (lines) => {
   return checks;
 }
 
-const calcPct = (checks) => {
+const calcPct = (grouped) => {
   // Get count of checks; this assumes
   // that we're looking for only two categories:
   // passes and fails
