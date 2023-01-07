@@ -63,17 +63,18 @@ async function updateIssue(checks, id) {
     owner: owner,
     repo: repo,
     issue_number: id,
+    labels: [checks.header.labels],
     body: checks.rendered
   })
 }
 
-const getGradeIssue = async () => {
+const getGradeIssue = async (template) => {
   let issues = await octokit.rest.issues.listForRepo({
     owner: owner,
     repo: repo
   });
   for(let issue of issues.data) {
-    if(issue.title == "Assignment Progress")
+    if(issue.title == template.header.title)
       return issue.number;
   }
 }
@@ -183,6 +184,7 @@ const run = async () => {
   for await (let data of proc.stdout){
     report.push(Buffer.from(data).toString());
   }
+  report = cleanLines(report);
   // Separate parsed checks and grader file
   let result = getResult(report);
   let grader = await loadGrader(result);
@@ -197,7 +199,7 @@ const run = async () => {
     {checks: grouped}
   );
   // Discover previously-created issues
-  let issue = await getGradeIssue();
+  let issue = await getGradeIssue(template);
   // FINISH HIM
   if(!issue) postIssue(template)
   else updateIssue(template, issue)
