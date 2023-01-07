@@ -14595,7 +14595,7 @@ const octokit = github.getOctokit(
 const repo = github.context.payload.repository.name;
 const owner = github.context.payload.repository.owner.login;
 
-const exec = (__nccwpck_require__(2081).exec)();
+const exec = util.promisify((__nccwpck_require__(2081).exec));
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
 const getTemplateHeader = (content) => {
@@ -14721,7 +14721,7 @@ const getResult = (lines) => {
 const run = async () => {
   // Acquire checks from running process
   let {stdout, stderr} = await exec(
-    "gatorgrade"
+    "gatorgrade --config .gatorgrade.yml"
   );
   let report = stdout;
   let lines = cleanLines(

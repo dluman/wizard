@@ -141,7 +141,7 @@ const getResult = (lines) => {
 const run = async () => {
   // Acquire checks from running process
   let {stdout, stderr} = await exec(
-    "gatorgrade"
+    "gatorgrade --config .gatorgrade.yml"
   );
   let report = stdout;
   let lines = cleanLines(
