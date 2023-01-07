@@ -14595,7 +14595,6 @@ const octokit = github.getOctokit(
 const repo = github.context.payload.repository.name;
 const owner = github.context.payload.repository.owner.login;
 
-//const exec = util.promisify(require('child_process').exec);
 const {spawn} = __nccwpck_require__(2081);
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
@@ -14736,8 +14735,9 @@ const run = async () => {
   let rendered = await loadAndRenderTemplate(
     {checks: grouped}
   );
-  // Post issue
-  let issue = await getGradeIssue();
+  // Discover previously-created issues
+  let issues = await getGradeIssue();
+  console.log(issues);
   // FINISH HIM
   postIssue(rendered);
 };
