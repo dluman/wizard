@@ -14721,14 +14721,11 @@ const getResult = (lines) => {
 
 const run = async () => {
   // Acquire checks from running process
-  let report;
+  let report = [];
   const proc = spawn("gatorgrade",["--config",".gatorgrade.yml"]);
   for await (let data of proc.stdout){
-    report = Buffer.from(data).toString();
+    report.push(Buffer.from(data).toString());
   }
-  let lines = cleanLines(
-    report.split("\n")
-  );  
   // Separate parsed checks and grader file
   let result = getResult(lines);
   let grader = await loadGrader(result);
