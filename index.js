@@ -161,7 +161,7 @@ const calcPct = (grouped) => {
     let category = grouped[group];
     let count = category.specifications.length;
     counts.total += count;
-    if(category.status == "✔") counts.achieved += count;
+    if(category.specifications.status == "✔") counts.achieved += count;
   })
   return Math.trunc(
     (counts.achieved / counts.total) * 100
@@ -188,7 +188,6 @@ const run = async () => {
   let rendered = await loadAndRenderTemplate(
     {checks: grouped}
   );
-  console.log(rendered);
   // Discover previously-created issues
   let issue = await getGradeIssue();
   // FINISH HIM
