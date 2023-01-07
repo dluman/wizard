@@ -14589,12 +14589,21 @@ const owner = github.context.payload.repository.owner.login;
 
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
+const getTemplateHeader = (content) => {
+  let header = /---[a-zA-Z:'\s]+---/.exec(templ);
+  return header;
+}
+
 const loadAndRenderTemplate = async (checks) => {
   let template = await loadFile(
     `${process.cwd()}/.github/ISSUE_TEMPLATE/wizard.md`
     // TESTING "templates/IssueTemplate.md"
   );
-  let rendered = Mustache.render(template, checks);
+  // Remove the header from the issue template; it's JANK!
+  let body = template.replace(
+    /---[a-zA-Z:'\s]+---/,''
+  ).trim()
+  let rendered = Mustache.render(body, checks);
   return rendered;
 }
 
@@ -14611,8 +14620,7 @@ async function postIssue(checks) {
     owner: owner,
     repo: repo,
     title: "Assignment Progress",
-    body: checks,
-    template: "wizard.md"
+    body: checks
   })
   console.log(isCreated);
 }

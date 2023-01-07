@@ -27,7 +27,10 @@ const loadAndRenderTemplate = async (checks) => {
     `${process.cwd()}/.github/ISSUE_TEMPLATE/wizard.md`
     // TESTING "templates/IssueTemplate.md"
   );
-  let body = t.replace(/---[a-zA-Z:'\s]+---/,'').trim()
+  // Remove the header from the issue template; it's JANK!
+  let body = template.replace(
+    /---[a-zA-Z:'\s]+---/,''
+  ).trim()
   let rendered = Mustache.render(body, checks);
   return rendered;
 }
