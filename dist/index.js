@@ -14628,7 +14628,7 @@ const getLatestAuthor = async () => {
     repo: repo
   });
   console.log(info);
-  return info.data[info.data.length - 1].author;
+  return info.data[info.data.length - 1].author.login;
 };
 
 const getTemplateHeader = (content) => {
