@@ -14611,7 +14611,8 @@ async function postIssue(checks) {
     owner: owner,
     repo: repo,
     title: "Assignment Progress",
-    body: checks
+    body: checks,
+    template: "wizard.md"
   })
   console.log(isCreated);
 }
