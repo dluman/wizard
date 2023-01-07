@@ -15,6 +15,7 @@ const octokit = github.getOctokit(
 const repo = github.context.payload.repository.name;
 const owner = github.context.payload.repository.owner.login;
 
+const exec = util.promisify(require('child_process').exec);
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
 const getTemplateHeader = (content) => {

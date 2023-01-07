@@ -14409,6 +14409,14 @@ module.exports = require("assert");
 
 /***/ }),
 
+/***/ 2081:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("child_process");
+
+/***/ }),
+
 /***/ 6113:
 /***/ ((module) => {
 
@@ -14587,6 +14595,7 @@ const octokit = github.getOctokit(
 const repo = github.context.payload.repository.name;
 const owner = github.context.payload.repository.owner.login;
 
+const exec = util.promisify((__nccwpck_require__(2081).exec));
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
 const getTemplateHeader = (content) => {
