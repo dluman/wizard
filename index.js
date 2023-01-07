@@ -147,7 +147,7 @@ const run = async () => {
     report.push(Buffer.from(data).toString());
   }
   // Separate parsed checks and grader file
-  let result = getResult(lines);
+  let result = getResult(report);
   let grader = await loadGrader(result);
   // Add categories from grader file
   let checks = getChecks(result, grader);
