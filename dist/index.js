@@ -14589,7 +14589,7 @@ const yaml = __nccwpck_require__(9613);
 const Mustache = __nccwpck_require__(9846);
 
 const octokit = github.getOctokit(
- process.env.GITHUB_TOKEN
+  process.env.GITHUB_TOKEN
 );
 
 const repo = github.context.payload.repository.name;
@@ -14729,6 +14729,25 @@ const getResult = (lines) => {
   return checks;
 }
 
+const calcPct = (checks) => {
+  // Get count of checks; this assumes
+  // that we're looking for only two categories:
+  // passes and fails
+  let counts = { 
+    total: 0,
+    achieved: 0
+  };
+  Object.keys(grouped).some((group) => {
+    let category = grouped[group];
+    let count = category.specifications.length;
+    counts.total += count;
+    if(category.status == "✔") counts.achieved += count;
+  })
+  return Math.trunc(
+    (counts.achieved / counts.total) * 100
+  );
+}
+
 const run = async () => {
   // Acquire checks from running process
   let report = [];
@@ -14742,6 +14761,9 @@ const run = async () => {
   // Add categories from grader file
   let checks = getChecks(result, grader);
   let grouped = groupChecks(checks);
+  grouped.push(
+    {pct: calcPct(grouped)}
+  )
   // Get and render template
   let rendered = await loadAndRenderTemplate(
     {checks: grouped}
