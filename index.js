@@ -68,7 +68,7 @@ const getGradeIssue = async () => {
   });
   for(let issue of issues.data) {
     if(issue.title == "Assignment Progress")
-      return issue.id;
+      return issue.number;
   }
 }
 
