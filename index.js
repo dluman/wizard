@@ -15,7 +15,8 @@ const octokit = github.getOctokit(
 const repo = github.context.payload.repository.name;
 const owner = github.context.payload.repository.owner.login;
 
-const exec = util.promisify(require('child_process').exec);
+//const exec = util.promisify(require('child_process').exec);
+const {spawn} = require('child_process');
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
 const getTemplateHeader = (content) => {
@@ -141,16 +142,13 @@ const getResult = (lines) => {
 const run = async () => {
   // Acquire checks from running process
   let report;
-  try{
-    let {stdout, stderr} = await exec(
-      "gatorgrade --config .gatorgrade.yml"
-    );
-  } catch(err) {
-    console.log(err);
+  const proc = spawn("gatorgrade",["--config",".gatorgrade.yml"]);
+  for await (let data of proc.stdout){
+    report = Buffer.from(data).toString();
   }
   let lines = cleanLines(
-      report.split("\n")
-  );
+    report.split("\n")
+  );  
   // Separate parsed checks and grader file
   let result = getResult(lines);
   let grader = await loadGrader(result);
