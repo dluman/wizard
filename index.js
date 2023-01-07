@@ -140,12 +140,10 @@ const getResult = (lines) => {
 
 const run = async () => {
   // Acquire checks from running process
-  let report;
-  exec(
-    `gatorgrade --config .gatorgrade.yml`,
-    (err, stdout, stderr) => {
-      console.log(`${err} ${stdout} ${stderr}`);
-  });
+  let {stdout, stderr} = await exec(
+    "gatorgrade"
+  );
+  let report = stdout;
   let lines = cleanLines(
       report.split("\n")
   );
