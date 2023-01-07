@@ -1,3 +1,11 @@
+---
+name: Wizard
+about: Template for Wizard reports
+title: ''
+labels: bug
+assignees: ''
+---
+
 # Failures
 
 Looks like we've still got some stuff to work on.
