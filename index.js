@@ -53,7 +53,6 @@ async function postIssue(checks) {
 }
 
 const getGradeIssue = async () => {
-  console.log(`${owner}/${repo}`)
   let issues = await octokit.rest.issues.listForRepo({
     owner: owner,
     repo: repo
@@ -139,9 +138,9 @@ const getResult = (lines) => {
 }
 
 const run = async () => {
-  // Acquire checks from cached file
-  let report = await loadFile(
-    `${process.cwd()}/report`
+  // Acquire checks from running process
+  const {stdout, stderr} = await exec(
+    "gatorgrade --config .gatorgrade.yml"
   );
   let lines = cleanLines(
       report.split("\n")
