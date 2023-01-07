@@ -161,7 +161,9 @@ const calcPct = (grouped) => {
     let category = grouped[group];
     let count = category.specifications.length;
     counts.total += count;
-    if(category.specifications.status == "✔") counts.achieved += count;
+    for(let specification of category.specifications) {
+      if(specification.status == "✔") counts.achieved += count;
+    }
   })
   return Math.trunc(
     (counts.achieved / counts.total) * 100
