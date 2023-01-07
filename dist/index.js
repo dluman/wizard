@@ -14589,13 +14589,13 @@ const yaml = __nccwpck_require__(9613);
 const Mustache = __nccwpck_require__(9846);
 
 const octokit = github.getOctokit(
-  process.env.GITHUB_TOKEN
+ process.env.GITHUB_TOKEN
 );
 
 const repo = github.context.payload.repository.name;
 const owner = github.context.payload.repository.owner.login;
 
-const exec = util.promisify((__nccwpck_require__(2081).exec));
+const exec = (__nccwpck_require__(2081).exec)();
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
 const getTemplateHeader = (content) => {
@@ -14722,11 +14722,9 @@ const run = async () => {
   // Acquire checks from running process
   let report;
   exec(
-    "gatorgrade --config .gatorgrade.yml"
-  ).then((stdout) => {
-    // Never
-  }).catch((stderr) => {
-    report = stderr
+    `gatorgrade --config .gatorgrade.yml`,
+    (err, stdout, stderr) => {
+      console.log(`${err} ${stdout} ${stderr}`);
   });
   let lines = cleanLines(
       report.split("\n")
