@@ -169,7 +169,7 @@ const run = async () => {
   // Discover previously-created issues
   let issue = await getGradeIssue();
   // FINISH HIM
-  if(issue) postIssue(rendered)
+  if(!issue) postIssue(rendered)
   else updateIssue(rendered, issue)
 };
 
