@@ -14598,6 +14598,36 @@ const owner = github.context.payload.repository.owner.login;
 const {spawn} = __nccwpck_require__(2081);
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
+async function postIssue(checks) {
+  let isCreated = await octokit.rest.issues.create({
+    owner: owner,
+    repo: repo,
+    title: checks.header.title,
+    labels: [checks.header.labels],
+    body: checks.rendered,
+    assignees: [getLatestAuthor()]
+  })
+}
+
+async function updateIssue(checks, id) {
+  let isUpdated = await octokit.rest.issues.update({
+    owner: owner,
+    repo: repo,
+    issue_number: id,
+    labels: [checks.header.labels],
+    body: checks.rendered,
+    assignees: [getLatestAuthor()]
+  })
+}
+
+const getLatestAuthor = async() => {
+  let info = await octokit.rest.repos.listCommits({
+    owner: owner,
+    repo: repo
+  });
+  return info.data[info.data.length-1].author;
+};
+
 const getTemplateHeader = (content) => {
   let header = /(?!---)[a-zA-Z:'\s]+(?!---)/.exec(content);
   let parsed = yaml.load(header);
@@ -14626,26 +14656,6 @@ const loadGrader = async (checks) => {
   );
   let data = yaml.load(definitions);
   return data;
-}
-
-async function postIssue(checks) {
-  let isCreated = await octokit.rest.issues.create({
-    owner: owner,
-    repo: repo,
-    title: checks.header.title,
-    labels: [checks.header.labels],
-    body: checks.rendered
-  })
-}
-
-async function updateIssue(checks, id) {
-  let isUpdated = await octokit.rest.issues.update({
-    owner: owner,
-    repo: repo,
-    issue_number: id,
-    labels: [checks.header.labels],
-    body: checks.rendered
-  })
 }
 
 const getGradeIssue = async (template) => {
