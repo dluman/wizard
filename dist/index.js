@@ -14743,7 +14743,7 @@ const calcPct = (grouped) => {
     counts.total += count;
     for(let specification of category.specifications) {
       console.log(specification);
-      if(specification.status == "✔") counts.achieved += count;
+      if(specification.status) counts.achieved += count;
     }
   })
   return Math.trunc(
@@ -14767,7 +14767,6 @@ const run = async () => {
   grouped.push(
     {pct: calcPct(grouped)}
   )
-  console.log(grouped);
   // Get and render template
   let rendered = await loadAndRenderTemplate(
     {checks: grouped}
