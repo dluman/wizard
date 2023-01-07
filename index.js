@@ -25,7 +25,6 @@ const getTemplateHeader = (content) => {
 const loadAndRenderTemplate = async (checks) => {
   let template = await loadFile(
     `${process.cwd()}/.github/ISSUE_TEMPLATE/wizard.md`
-    // TESTING "templates/IssueTemplate.md"
   );
   // Remove the header from the issue template; it's JANK!
   let body = template.replace(
