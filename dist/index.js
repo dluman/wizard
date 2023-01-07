@@ -14599,8 +14599,9 @@ const {spawn} = __nccwpck_require__(2081);
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
 const getTemplateHeader = (content) => {
-  let header = /---[a-zA-Z:'\s]+---/.exec(templ);
-  return header;
+  let header = /---[a-zA-Z:'\s]+---/.exec(content);
+  let parsed = yaml.load(header);
+  return parsed;
 }
 
 const loadAndRenderTemplate = async (checks) => {
@@ -14608,11 +14609,15 @@ const loadAndRenderTemplate = async (checks) => {
     `${process.cwd()}/.github/ISSUE_TEMPLATE/wizard.md`
   );
   // Remove the header from the issue template; it's JANK!
+  let header = getTemplateHeader(template);
   let body = template.replace(
     /---[a-zA-Z:'\s]+---/,''
   ).trim()
   let rendered = Mustache.render(body, checks);
-  return rendered;
+  return {
+    header: header,
+    rendered: rendered
+  }
 }
 
 const loadGrader = async (checks) => {
@@ -14627,8 +14632,9 @@ async function postIssue(checks) {
   let isCreated = await octokit.rest.issues.create({
     owner: owner,
     repo: repo,
-    title: "Assignment Progress",
-    body: checks
+    title: checks.header.title,
+    labels: [checks.header.labels],
+    body: checks.rendered
   })
 }
 
@@ -14637,7 +14643,7 @@ async function updateIssue(checks, id) {
     owner: owner,
     repo: repo,
     issue_number: id,
-    body: checks
+    body: checks.rendered
   })
 }
 
@@ -14767,14 +14773,14 @@ const run = async () => {
     {pct: calcPct(grouped)}
   )
   // Get and render template
-  let rendered = await loadAndRenderTemplate(
+  let template = await loadAndRenderTemplate(
     {checks: grouped}
   );
   // Discover previously-created issues
   let issue = await getGradeIssue();
   // FINISH HIM
-  if(!issue) postIssue(rendered)
-  else updateIssue(rendered, issue)
+  if(!issue) postIssue(template)
+  else updateIssue(template, issue)
 };
 
 run();
