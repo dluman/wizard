@@ -188,6 +188,7 @@ const run = async () => {
   let rendered = await loadAndRenderTemplate(
     {checks: grouped}
   );
+  console.log(rendered);
   // Discover previously-created issues
   let issue = await getGradeIssue();
   // FINISH HIM
