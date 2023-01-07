@@ -9,7 +9,7 @@ const yaml = require('js-yaml');
 const Mustache = require('mustache');
 
 const octokit = github.getOctokit(
-  process.env.GITHUB_TOKEN
+ process.env.GITHUB_TOKEN
 );
 
 const repo = github.context.payload.repository.name;
@@ -141,11 +141,12 @@ const getResult = (lines) => {
 const run = async () => {
   // Acquire checks from running process
   let report;
-  exec(
+  await exec(
     "gatorgrade --config .gatorgrade.yml"
   ).then((stdout) => {
-    // Never
+    console.log(stdout);
   }).catch((stderr) => {
+    console.log(stderr);
     report = stderr
   });
   let lines = cleanLines(
