@@ -9,10 +9,6 @@ inputs:
     description: 'Configuration file for gatorgrade checks'
     required: true
     default: 'gatorgrade.yml'
-  organizing-key:
-    description: 'Result key by which to organize the issue headings'
-    required: true
-    default: 'category'
 runs:
   using: 'node16'
   main: 'dist/index.js'
