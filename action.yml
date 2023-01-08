@@ -6,11 +6,11 @@ inputs:
     required: true
     default: '.github/ISSUE_TEMPLATE/wizard.md'
   gatorgrade-config:
-    description: 'Configuration file for gatorgrade checks'
+    description: 'Configuration file for gatorgrade checks  (default: gatorgrade.yml'
     required: true
     default: 'gatorgrade.yml'
   organizing-key:
-    description: 'Result key by which to organize the issue headings'
+    description: 'Result key by which to organize the issue headings (default: category)'
     required: true
     default: 'category'
 runs:
