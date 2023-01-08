@@ -14762,7 +14762,8 @@ const calcPct = (grouped) => {
     let count = category.specifications.length;
     counts.total += count;
     for(let specification of category.specifications) {
-      if(specification.status == "✔") counts.achieved += count;
+      if(specification.status == "✔" || specification == "✓") 
+        counts.achieved += count;
     }
   })
   return Math.trunc(
