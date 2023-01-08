@@ -1,6 +1,6 @@
 name: 'Wizard'
 description: 'Issue reporting based on the GatorGrader automated grading system (AGS)'
-input:
+inputs:
   issue-template:
     description: 'Issue template file (default: .github/ISSUE_TEMPLATE/wizard.md)'
     required: true
