@@ -1,5 +1,18 @@
 name: 'Wizard'
 description: 'Issue reporting based on the GatorGrader automated grading system (AGS)'
+input:
+  issue-template:
+    description: 'Issue template file (default: .github/ISSUE_TEMPLATE/wizard.md)'
+    required: true
+    default: '.github/ISSUE_TEMPLATE/wizard.md'
+  gatorgrade-config:
+    description: 'Configuration file for gatorgrade checks'
+    required: true
+    default: 'gatorgrade.yml'
+  organizing-key:
+    description: 'Result key by which to organize the issue headings'
+    required: true
+    default: 'status'
 runs:
   using: 'node16'
   main: 'dist/index.js'

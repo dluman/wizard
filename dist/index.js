@@ -14594,6 +14594,7 @@ const octokit = github.getOctokit(
 
 const repo = github.context.payload.repository.name;
 const owner = github.context.payload.repository.owner.login;
+const orgBy = core.getInput('organizing-key');
 
 const {spawn} = __nccwpck_require__(2081);
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
@@ -14638,7 +14639,7 @@ const getTemplateHeader = (content) => {
 
 const loadAndRenderTemplate = async (checks) => {
   let template = await loadFile(
-    `${process.cwd()}/.github/ISSUE_TEMPLATE/wizard.md`
+    `${process.cwd()}/${core.getInput('issue-template')}`
   );
   // Remove the header from the issue template; it's JANK!
   let header = getTemplateHeader(template);
@@ -14654,7 +14655,7 @@ const loadAndRenderTemplate = async (checks) => {
 
 const loadGrader = async (checks) => {
   let definitions = await loadFile(
-    `${process.cwd()}/.gatorgrade.yml`
+    `${process.cwd()}/${core.getInput('gatorgrade-config')}`
   );
   let data = yaml.load(definitions);
   return data;
@@ -14683,11 +14684,11 @@ const cleanLines = (lines) => {
 const assignCategory = (obj) => {
   let check;
   Object.keys(obj).some((key) => {
-    if(key == "category") {
+    if(key == orgBy) {
       check = {
-        "category": obj.category,
+        [orgBy]: obj[orgBy],
         "description": obj.description,
-        "status": false
+        "status": "✘"
       }
       return true;
     }
@@ -14707,7 +14708,7 @@ const getChecks = (result, grader) => {
   }
   Object.values(checks).some((check) => {
     if(result.passed.includes(check.description))
-      check.status = true;
+      check.status = "✔";
   });
   return checks;
 }
@@ -14716,12 +14717,12 @@ const groupChecks = (checks) => {
   return Array.from(
     checks.reduce((prev, next) => {
       prev.set(
-        next.category,
-        (prev.get(next.category) || []).concat(next)
+        next[orgBy],
+        (prev.get(next[orgBy]) || []).concat(next)
       )
       return prev
     }, new Map).entries(),
-    ([category, specifications]) => ({category, specifications})
+    ([orgBy, specifications]) => ({orgBy, specifications})
   )
 }
 
@@ -14761,7 +14762,7 @@ const calcPct = (grouped) => {
     let count = category.specifications.length;
     counts.total += count;
     for(let specification of category.specifications) {
-      if(specification.status) counts.achieved += count;
+      if(specification.status == "✔") counts.achieved += count;
     }
   })
   return Math.trunc(
@@ -14772,7 +14773,10 @@ const calcPct = (grouped) => {
 const run = async () => {
   // Acquire checks from running process
   let report = [];
-  const proc = spawn("gatorgrade",["--config",".gatorgrade.yml"]);
+  const proc = spawn(
+    "gatorgrade",
+    ["--config",`${core.getInput('gatorgrade-config')}`]
+  );
   for await (let data of proc.stdout){
     report.push(Buffer.from(data).toString());
   }
