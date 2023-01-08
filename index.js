@@ -107,7 +107,7 @@ const assignCategory = (obj) => {
   Object.keys(obj).some((key) => {
     if(key == orgBy) {
       check = {
-        "category": obj[orgBy],
+        [orgBy]: obj[orgBy],
         "description": obj.description,
         "status": "✘"
       }
@@ -138,7 +138,7 @@ const groupChecks = (checks) => {
   return Array.from(
     checks.reduce((prev, next) => {
       prev.set(
-        next.category
+        next.category,
         (prev.get(next.category) || []).concat(next)
       )
       return prev
