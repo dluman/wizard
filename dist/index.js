@@ -14594,6 +14594,7 @@ const octokit = github.getOctokit(
 
 const repo = github.context.payload.repository.name;
 const owner = github.context.payload.repository.owner.login;
+// Issue with orgBy here -- trouble making this principle dynamic?
 const orgBy = core.getInput('organizing-key');
 
 const {spawn} = __nccwpck_require__(2081);
@@ -14686,7 +14687,7 @@ const assignCategory = (obj) => {
   Object.keys(obj).some((key) => {
     if(key == orgBy) {
       check = {
-        [orgBy]: obj[orgBy],
+        "category": obj[orgBy],
         "description": obj.description,
         "status": "✘"
       }
@@ -14717,12 +14718,12 @@ const groupChecks = (checks) => {
   return Array.from(
     checks.reduce((prev, next) => {
       prev.set(
-        next[orgBy],
-        (prev.get(next[orgBy]) || []).concat(next)
+        next.category
+        (prev.get(next.category) || []).concat(next)
       )
       return prev
     }, new Map).entries(),
-    ([orgBy, specifications]) => ({orgBy, specifications})
+    ([category, specifications]) => ({category, specifications})
   )
 }
 
