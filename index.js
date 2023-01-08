@@ -109,7 +109,7 @@ const assignCategory = (obj) => {
       check = {
         [orgBy]: obj[orgBy],
         "description": obj.description,
-        "status": "✘"
+        "status": false
       }
       return true;
     }
@@ -129,7 +129,7 @@ const getChecks = (result, grader) => {
   }
   Object.values(checks).some((check) => {
     if(result.passed.includes(check.description))
-      check.status = "✔";
+      check.status = true;
   });
   return checks;
 }
@@ -162,7 +162,7 @@ const getResult = (lines) => {
     let status = check[0];
     // Retrieve the body of the check
     let body = check.substring(1).trim();
-    if(status == "✔" || status == "✓") checks.passed.push(body);
+    if(status == "✓") checks.passed.push(body);
     // TODO: Really, combine failures into a "check" and annotation
     //       (see above regex commented out)
     else checks.failed.push(body);
@@ -178,13 +178,13 @@ const calcPct = (grouped) => {
     total: 0,
     achieved: 0
   };
-  console.log(grouped);
   Object.keys(grouped).some((group) => {
     let category = grouped[group];
     let count = category.specifications.length;
     counts.total += count;
     for(let specification of category.specifications) {
-      if(specification.status == "✔" || specification == "✓") 
+      console.log(specification);
+      if(specification.status) 
         counts.achieved += count;
     }
   })
