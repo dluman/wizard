@@ -183,7 +183,6 @@ const calcPct = (grouped) => {
     let count = category.specifications.length;
     counts.total += count;
     for(let specification of category.specifications) {
-      console.log(specification.status);
       if(specification.status == "✔" || specification == "✓") 
         counts.achieved += count;
     }
