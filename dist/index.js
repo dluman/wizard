@@ -14762,11 +14762,9 @@ const calcPct = (grouped) => {
     let category = grouped[group];
     let count = category.specifications.length;
     counts.total += count;
-    console.log(category.specifications);
-    let passed = category.specifications.reduce(
-      result => result
+    let passed = category.specifications.filter(
+      result => result.status
     );
-    console.log(passed);
     counts.achieved += passed.length;
   });
   return Math.trunc(
