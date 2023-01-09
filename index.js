@@ -209,8 +209,10 @@ const run = async () => {
   // Add categories from grader file
   let checks = getChecks(result, grader);
   let grouped = groupChecks(checks);
+  let completion = calcPct(grouped);
   grouped.push(
-    {pct: calcPct(grouped)}
+    {pct: completion},
+    {todos: true ? completion == 100 : false}
   )
   // Get and render template
   let template = await loadAndRenderTemplate(
