@@ -178,14 +178,16 @@ const calcPct = (grouped) => {
     total: 0,
     achieved: 0
   };
-  for(let group of grouped) {
+  Object.keys(groups).some((group) => {
     let category = grouped[group];
     let count = category.specifications.length;
+    console.log(count);
     counts.total += count;
     counts.achieved += category.specifications.map((spec) => {
       return spec.status == true;
     }).length;
-  }
+    console.log(grouped[group]);
+  });
   return Math.trunc(
     (counts.achieved / counts.total) * 100
   );
