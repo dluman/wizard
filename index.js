@@ -178,7 +178,7 @@ const calcPct = (grouped) => {
     total: 0,
     achieved: 0
   };
-  Object.keys(groups).some((group) => {
+  Object.keys(grouped).some((group) => {
     let category = grouped[group];
     let count = category.specifications.length;
     console.log(count);
