@@ -182,6 +182,7 @@ const calcPct = (grouped) => {
     let category = grouped[group];
     let count = category.specifications.length;
     counts.total += count;
+    console.log(category.sepcifications);
     let passed = category.specifications.reduce(
       result => result
     );
