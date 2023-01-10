@@ -28,7 +28,8 @@ async function postIssue(checks) {
     title: checks.header.title,
     labels: [checks.header.labels],
     body: checks.rendered,
-    assignees: [lastAuthor]
+    assignees: [lastAuthor],
+    login: 'gradewizard'
   })
 }
 
