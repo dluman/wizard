@@ -217,7 +217,9 @@ const run = async () => {
   let template = await loadAndRenderTemplate(
     {
       checks: grouped,
-      outcome: true ? completion == 100: false
+      outcome: {
+        "todos": true ? completion == 100: false
+      }
     }
   );
   // Discover previously-created issues
