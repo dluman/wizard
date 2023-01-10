@@ -6,7 +6,7 @@ inputs:
     required: true
     default: '.github/ISSUE_TEMPLATE/wizard.md'
   gatorgrade-config:
-    description: 'Configuration file for gatorgrade checks  (default: gatorgrade.yml'
+    description: 'Configuration file for gatorgrade checks  (default: gatorgrade.yml)'
     required: true
     default: 'gatorgrade.yml'
   organizing-key:
