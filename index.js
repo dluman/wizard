@@ -211,12 +211,14 @@ const run = async () => {
   let grouped = groupChecks(checks);
   let completion = calcPct(grouped);
   grouped.push(
-    {pct: completion},
-    {todos: true ? completion == 100 : false}
+    {pct: completion}
   )
   // Get and render template
   let template = await loadAndRenderTemplate(
-    {checks: grouped}
+    {
+      checks: grouped,
+      outcome: true ? completion == 100: false
+    }
   );
   // Discover previously-created issues
   let issue = await getGradeIssue(template);
