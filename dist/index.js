@@ -14606,7 +14606,7 @@ async function postIssue(checks) {
     owner: owner,
     repo: repo,
     title: checks.header.title,
-    labels: [checks.header.labels],
+    //labels: [checks.header.labels],
     body: checks.rendered,
     assignees: [lastAuthor],
     login: 'gradewizard'
@@ -14619,7 +14619,7 @@ async function updateIssue(checks, id) {
     owner: owner,
     repo: repo,
     issue_number: id,
-    labels: [checks.header.labels],
+    //labels: [checks.header.labels],
     body: checks.rendered,
     assignees: [lastAuthor]
   })
@@ -14755,7 +14755,7 @@ const calcPct = (grouped) => {
   // Get count of checks; this assumes
   // that we're looking for only two categories:
   // passes and fails
-  let counts = { 
+  let counts = {
     total: 0,
     achieved: 0
   };
