@@ -50,7 +50,7 @@ const getLatestAuthor = async () => {
     owner: owner,
     repo: repo
   });
-  return info.data[info.data.length - 1].author.login;
+  return info.data[0].author.login;
 };
 
 const getTemplateHeader = (content) => {
