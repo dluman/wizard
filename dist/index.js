@@ -20724,7 +20724,10 @@ const getTeamMembers = async(team) => {
     org: owner,
     team_slug: team
   });
-  return members;
+  logins = members.map((member) => {
+     return member.login;
+  });
+  return logins;
 };
 
 const getTemplateHeader = (content) => {
