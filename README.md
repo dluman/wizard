@@ -21,6 +21,15 @@ science.
 
 ## Using `wizard`
 
+As of `v0.5.0`, Wizard requires a [GitHub Personal Access Token (PAT)](https://github.com/settings/tokens) set as an organization-level secret. 
+This token must have the following permissions:
+
+* `admin:org`
+* `repo`
+* `workflow`
+
+To continue using Wizard with the default Actions flow token, revert to `v0.3.2`. However, `v0.3.2.` _does not support_ assigning all the members of a given team and, instead, only assigns the last commit author as the assignee of the issue created.
+
 To integrate `wizard` into your GitHub Actions workflow, complete a few steps:
 
 1. Create a GitHub Issue Template; we suggest you use the example template in `templates/wizard.md` to get started
