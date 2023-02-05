@@ -20718,7 +20718,7 @@ const getRepoTeams = async() => {
   return await getTeamMembers(slugs);
 };
 
-const getTeamMembers = async() => {
+const getTeamMembers = async(team) => {
   let members = octokit.rest.teams.listMembersInOrg({
     org: owner,
     team_slug: team
