@@ -20723,6 +20723,7 @@ const getTeamMembers = async(team) => {
     org: owner,
     team_slug: team
   });
+  console.log(members);
   return members;
 };
 
