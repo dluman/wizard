@@ -20715,7 +20715,15 @@ const getRepoTeams = async() => {
       slugs.push(res[item]);
     }
   });
-  return slugs;
+  return await getTeamMembers(slugs);
+};
+
+const getTeamMembers = async() => {
+  let members = octokit.rest.teams.listMembersInOrg({
+    org: owner,
+    team_slug: team
+  });
+  return members;
 };
 
 const getTemplateHeader = (content) => {
