@@ -23,7 +23,7 @@ const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
 async function postIssue(checks) {
   let teams = await getRepoTeams();
-  let lastAuthor = teams ? teams.flat(1) : [await getLatestAuthor()];
+  let lastAuthor = teams.length > 0 ? teams.flat(1) : [await getLatestAuthor()];
   let isCreated = await octokit.rest.issues.create({
     owner: owner,
     repo: repo,
@@ -37,8 +37,7 @@ async function postIssue(checks) {
 
 async function updateIssue(checks, id) {
   let teams = await getRepoTeams();
-  let lastAuthor = teams ? teams.flat(1) : [await getLatestAuthor()];
-  console.log(lastAuthor);
+  let lastAuthor = teams.length > 0 ? teams.flat(1) : [await getLatestAuthor()];
   let isUpdated = await octokit.rest.issues.update({
     owner: owner,
     repo: repo,
