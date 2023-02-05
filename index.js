@@ -21,7 +21,8 @@ const {spawn} = require('child_process');
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
 async function postIssue(checks) {
-  let lastAuthor = await getLatestAuthor();
+  let teams = await getRepoTeams();
+  let lastAuthor = teams ? teams : await getLatestAuthor();
   let isCreated = await octokit.rest.issues.create({
     owner: owner,
     repo: repo,
@@ -51,6 +52,23 @@ const getLatestAuthor = async () => {
     repo: repo
   });
   return info.data[0].author.login;
+};
+
+const getRepoTeams = async() => {
+  let slugs = [];
+  let list = await octokit.rest.repos.listTeams({
+    owner: owner,
+    repo: repo
+  });
+  let teams = list.data;
+    async.map(teams, (value, fn) => {
+    fn(null, value.slug);
+  }, (err, res) => {
+    for(let item in res){
+      slugs.push(res[item]);
+    }
+  });
+  return slugs;
 };
 
 const getTemplateHeader = (content) => {
