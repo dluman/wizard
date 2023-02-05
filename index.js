@@ -4,6 +4,7 @@ const core = require('@actions/core');
 const fs = require('fs');
 const path = require('path');
 const util = require('util');
+const async = require('async');
 const yaml = require('js-yaml');
 
 const Mustache = require('mustache');

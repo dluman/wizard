@@ -14393,6 +14393,14 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 3494:
+/***/ ((module) => {
+
+module.exports = eval("require")("async");
+
+
+/***/ }),
+
 /***/ 9590:
 /***/ ((module) => {
 
@@ -14584,6 +14592,7 @@ const core = __nccwpck_require__(532);
 const fs = __nccwpck_require__(7147);
 const path = __nccwpck_require__(1017);
 const util = __nccwpck_require__(3837);
+const async = __nccwpck_require__(3494);
 const yaml = __nccwpck_require__(7354);
 
 const Mustache = __nccwpck_require__(8233);
