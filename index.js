@@ -64,7 +64,7 @@ const getRepoTeams = async() => {
     repo: repo
   });
   let teams = list.data;
-    async.map(teams, (value, fn) => {
+  async.map(teams, (value, fn) => {
     fn(null, value.slug);
   }, (err, res) => {
     for(let item in res){
@@ -79,8 +79,8 @@ const getTeamMembers = async(team) => {
     org: owner,
     team_slug: team
   });
-  logins = members.map((member) => {
-     return member.login;
+  let logins = members.data.map((member) => {
+    return member.login;
   });
   return logins;
 };
