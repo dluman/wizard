@@ -73,15 +73,19 @@ const getRepoTeams = async() => {
   return await getTeamMembers(slugs);
 };
 
-const getTeamMembers = async(team) => {
-  if(!team) return null;
-  let members = await octokit.rest.teams.listMembersInOrg({
-    org: owner,
-    team_slug: team
-  });
-  let logins = members.data.map((member) => {
-    return member.login;
-  });
+const getTeamMembers = async(teams) => {
+  if(!teams) return undefined;
+  let logins = [];
+  for(let team of teams) {
+    let members = await octokit.rest.teams.listMembersInOrg({
+      org: owner,
+      team_slug: team
+    });
+    let users = members.data.map((member) => {
+      return member.login;
+    });
+    logins.push(users.flat(1))
+  }
   return logins;
 };
 
