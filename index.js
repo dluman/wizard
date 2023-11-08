@@ -18,8 +18,8 @@ const owner = github.context.payload.repository.owner.login;
 // Issue with orgBy here -- trouble making this principle dynamic?
 const orgBy = core.getInput('organizing-key');
 
-const {spawn} = require('child_process');
-const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
+const command = `gatorgrade --config config/gatorgrade.yml --report file json gatorgrade_summary.json`;
+const spawn = require('child_process').spawn;
 
 async function postIssue(checks) {
   let teams = await getRepoTeams();
@@ -181,8 +181,8 @@ const groupChecks = (checks) => {
       return prev
     }, new Map).entries(),
     ([category, specifications]) => ({category, specifications})
-  )
-}
+  );
+};
 
 const getResult = (lines) => {
   // Separate checks from irrelevant lines
@@ -227,43 +227,45 @@ const calcPct = (grouped) => {
   return Math.trunc(
     (counts.achieved / counts.total) * 100
   );
-}
+};
 
 const run = async () => {
-  // Acquire checks from running process
+  // Execute the gatorgrade command
+  const proc = spawn('bash', ['-c', command]);
+
+  // Collect the output from the command execution
   let report = [];
-  const proc = spawn(
-    "gatorgrade",
-    ["--config",`${core.getInput('gatorgrade-config')}`]
-  );
-  for await (let data of proc.stdout){
+  for await (let data of proc.stdout) {
     report.push(Buffer.from(data).toString());
   }
-  report = cleanLines(report);
-  // Separate parsed checks and grader file
-  let result = getResult(report);
-  let grader = await loadGrader(result);
-  // Add categories from grader file
-  let checks = getChecks(result, grader);
-  let grouped = groupChecks(checks);
-  let completion = calcPct(grouped);
-  grouped.push(
-    {pct: completion}
-  )
-  // Get and render template
-  let template = await loadAndRenderTemplate(
-    {
-      checks: grouped,
-      outcome: {
-        "todos": true ? completion == 100: false
-      }
-    }
-  );
+
+  // Parse the JSON report
+  const jsonString = report.join('');
+  const checks = JSON.parse(jsonString);
+
+  // Group the checks
+  const groupedChecks = groupChecks(checks);
+
+  // Calculate the completion percentage
+  const completion = calcPct(groupedChecks);
+
+  // Render the template
+  const template = await loadAndRenderTemplate({
+    checks: groupedChecks,
+    outcome: {
+      todos: true ? completion === 100 : false,
+    },
+  });
+
   // Discover previously-created issues
-  let issue = await getGradeIssue(template);
-  // FINISH HIM
-  if(!issue) postIssue(template)
-  else updateIssue(template, issue)
+  const issue = await getGradeIssue(template);
+
+  // Update the issue if necessary
+  if (!issue) {
+    postIssue(template);
+  } else {
+    updateIssue(template, issue);
+  }
 };
 
 run();
