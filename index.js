@@ -17,7 +17,9 @@ const repo = github.context.payload.repository.name;
 const owner = github.context.payload.repository.owner.login;
 // Issue with orgBy here -- trouble making this principle dynamic?
 const orgBy = core.getInput('organizing-key');
+const report = core.getInput('grader-report');
 
+// We don't need to spawn the command anymore; use the filename in const report
 const command = `gatorgrade --config config/gatorgrade.yml --report file json gatorgrade_summary.json`;
 const spawn = require('child_process').spawn;
 
