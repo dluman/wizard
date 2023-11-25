@@ -110,14 +110,6 @@ const loadAndRenderTemplate = async (checks) => {
   }
 }
 
-const loadGrader = async (checks) => {
-  let definitions = await loadFile(
-    `${process.cwd()}/${core.getInput('gatorgrade-config')}`
-  );
-  let data = yaml.load(definitions);
-  return data;
-}
-
 const getGradeIssue = async (template) => {
   let issues = await octokit.rest.issues.listForRepo({
     owner: owner,
@@ -127,47 +119,6 @@ const getGradeIssue = async (template) => {
     if(issue.title == template.header.title)
       return issue.number;
   }
-}
-
-const cleanLines = (lines) => {
-  // Remove blanks
-  lines = lines.filter(line => line);
-  // Trim whitespace
-  lines = lines.map(line => line.trim());
-  // Remove duplicates
-  return [...new Set(lines)];
-}
-
-const assignCategory = (obj) => {
-  let check;
-  Object.keys(obj).some((key) => {
-    if(key == orgBy) {
-      check = {
-        [orgBy]: obj[orgBy],
-        "description": obj.description,
-        "status": false
-      }
-      return true;
-    }
-    if(typeof obj[key] === "object"){
-      check = assignCategory(obj[key]);
-      return check !== undefined;
-    }
-  });
-  return check;
-}
-
-const getChecks = (result, grader) => {
-  let checks = [];
-  for(let spec of grader) {
-    let check = assignCategory(spec);
-    checks.push(check);
-  }
-  Object.values(checks).some((check) => {
-    if(result.passed.includes(check.description))
-      check.status = true;
-  });
-  return checks;
 }
 
 const groupChecks = (checks) => {
@@ -183,60 +134,13 @@ const groupChecks = (checks) => {
   );
 };
 
-const getResult = (lines) => {
-  // Separate checks from irrelevant lines
-  let checkSymbols = ["✔","✘","✓","✕"]; //,"➔","→"];
-  let regexp = new RegExp(`(${checkSymbols.join("|")})`,"g");
-  lines = lines.filter(line => !line.search(regexp));
-  // Sort checks into object
-  let checks = {
-    "passed": [],
-    "failed": []
-  };
-  for(let check of lines) {
-    // Get success or failure
-    let status = check[0];
-    // Retrieve the body of the check
-    let body = check.substring(1).trim();
-    if(status == "✓") checks.passed.push(body);
-    // TODO: Really, combine failures into a "check" and annotation
-    //       (see above regex commented out)
-    else checks.failed.push(body);
-  }
-  return checks;
-}
-
-const calcPct = (grouped) => {
-  // Get count of checks; this assumes
-  // that we're looking for only two categories:
-  // passes and fails
-  let counts = {
-    total: 0,
-    achieved: 0
-  };
-  Object.keys(grouped).some((group) => {
-    let category = grouped[group];
-    let count = category.specifications.length;
-    counts.total += count;
-    let passed = category.specifications.filter(
-      result => result.status
-    );
-    counts.achieved += passed.length;
-  });
-  return Math.trunc(
-    (counts.achieved / counts.total) * 100
-  );
-};
-
 const run = () => {
   fs.readFile(reportFile, async (err,data) => {
     let report = JSON.parse(data);
-    let groupedChecks = groupChecks(report.checks);
-    let 
 
     // Render the template
     const template = await loadAndRenderTemplate({
-      checks: groupedChecks,
+      checks: groupChecks(report.checks),
       outcome: {
         todos: true ? report.percentage_score === 100 : false,
       },
@@ -246,11 +150,9 @@ const run = () => {
     const issue = await getGradeIssue(template);
 
     // Update the issue if necessary
-    if (!issue) {
-      postIssue(template);
-    } else {
-      updateIssue(template, issue);
-    }
+    if (!issue) postIssue(template);
+    else updateIssue(template, issue);
+    
   });
 };
 
