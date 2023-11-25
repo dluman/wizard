@@ -1,5 +1,5 @@
-const github = require('@actions/github');
 const core = require('@actions/core');
+const github = require('@actions/github');
 
 const fs = require('fs');
 const path = require('path');
@@ -15,13 +15,10 @@ const octokit = github.getOctokit(
 
 const repo = github.context.payload.repository.name;
 const owner = github.context.payload.repository.owner.login;
+
 // Issue with orgBy here -- trouble making this principle dynamic?
 const orgBy = core.getInput('organizing-key');
-const report = core.getInput('grader-report');
-
-// We don't need to spawn the command anymore; use the filename in const report
-const command = `gatorgrade --config config/gatorgrade.yml --report file json gatorgrade_summary.json`;
-const spawn = require('child_process').spawn;
+const reportFile = core.getInput('grader-report');
 
 async function postIssue(checks) {
   let teams = await getRepoTeams();
@@ -231,43 +228,30 @@ const calcPct = (grouped) => {
   );
 };
 
-const run = async () => {
-  // Execute the gatorgrade command
-  const proc = spawn('bash', ['-c', command]);
+const run = () => {
+  fs.readFile(reportFile, async (err,data) => {
+    let report = JSON.parse(data);
+    let groupedChecks = groupChecks(report.checks);
+    let 
 
-  // Collect the output from the command execution
-  let report = [];
-  for await (let data of proc.stdout) {
-    report.push(Buffer.from(data).toString());
-  }
+    // Render the template
+    const template = await loadAndRenderTemplate({
+      checks: groupedChecks,
+      outcome: {
+        todos: true ? report.percentage_score === 100 : false,
+      },
+    });
 
-  // Parse the JSON report
-  const jsonString = report.join('');
-  const checks = JSON.parse(jsonString);
+    // Discover previously-created issues
+    const issue = await getGradeIssue(template);
 
-  // Group the checks
-  const groupedChecks = groupChecks(checks);
-
-  // Calculate the completion percentage
-  const completion = calcPct(groupedChecks);
-
-  // Render the template
-  const template = await loadAndRenderTemplate({
-    checks: groupedChecks,
-    outcome: {
-      todos: true ? completion === 100 : false,
-    },
+    // Update the issue if necessary
+    if (!issue) {
+      postIssue(template);
+    } else {
+      updateIssue(template, issue);
+    }
   });
-
-  // Discover previously-created issues
-  const issue = await getGradeIssue(template);
-
-  // Update the issue if necessary
-  if (!issue) {
-    postIssue(template);
-  } else {
-    updateIssue(template, issue);
-  }
 };
 
 run();
