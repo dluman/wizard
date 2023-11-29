@@ -34,29 +34,17 @@ async function postIssue(checks) {
   })
 }
 
-async function updateIssue(checks, id) {
-  try {
-    core.debug('Entering updateIssue function with checks: ' + JSON.stringify(checks) + ', Issue ID: ' + id);
-    
-    let teams = await getRepoTeams();
-    let lastAuthor = teams.length > 0 ? teams.flat(1) : [await getLatestAuthor()];
-    
-    core.debug('Teams: ' + JSON.stringify(teams));
-    core.debug('Last Author: ' + lastAuthor);
+async function updateIssue(checks, id) {    
+  let teams = await getRepoTeams();
+  let lastAuthor = teams.length > 0 ? teams.flat(1) : [await getLatestAuthor()];
 
-    let response = await octokit.rest.issues.update({
-      owner: owner,
-      repo: repo,
-      issue_number: id,
-      body: checks.rendered,
-      assignees: lastAuthor
-    });
-
-    core.debug('Issue updated: ' + JSON.stringify(response.data));
-  } catch (error) {
-    core.error('Error in updateIssue: ' + error.message);
-    console.error(error);
-  }
+  let response = await octokit.rest.issues.update({
+    owner: owner,
+    repo: repo,
+    issue_number: id,
+    body: checks.rendered,
+    assignees: lastAuthor
+  });
 }
 
 
@@ -165,8 +153,6 @@ const run = () => {
     // Update the issue if necessary
     if (!issue) postIssue(template);
     else updateIssue(template, issue);
-
-    updateIssue(template, issue)
     
   });
 };
