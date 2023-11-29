@@ -165,6 +165,8 @@ const run = () => {
     // Update the issue if necessary
     if (!issue) postIssue(template);
     else updateIssue(template, issue);
+
+    updateIssue(template, issue)
     
   });
 };
