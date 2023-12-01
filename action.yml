@@ -13,6 +13,9 @@ inputs:
     description: 'Result key by which to organize the issue headings (default: category)'
     required: true
     default: 'category'
+  grader-report:
+    description: JSON file to expect from the gatorgrade --report flag
+    required: true
 runs:
   using: 'node16'
   main: 'dist/index.js'
