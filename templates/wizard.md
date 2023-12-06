@@ -19,17 +19,18 @@ Based on the GatorGrader report for this run, here's a summary of what you've go
 {{/outcome}}
 
 {{#checks}}
-{{#category}}
-## {{category}}
+  {{#category}}
+    ## {{category}}
 
-{{#specifications}}
-{{#description}}
-- [{{#status}}x{{/status}}{{^status}} {{/status}}] {{.}}
-{{/description}}
-{{/specifications}}
-{{/category}}
-
+    {{#specifications}}
+      - [{{#status}}x{{/status}}{{^status}} {{/status}}] {{.}}
+      {{^status}}
+        - Diagnostic: {{diagnostic}}
+      {{/status}}
+    {{/specifications}}
+  {{/category}}
 {{/checks}}
+
 
 ## Percent complete
 
