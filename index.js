@@ -131,7 +131,13 @@ const groupChecks = (checks) => {
       )
       return prev
     }, new Map).entries(),
-    ([category, specifications]) => ({category, specifications})
+    ([category, specifications]) => ({
+      category, 
+      specifications: specifications.map(spec => ({
+        ...spec,
+        diagnostic: spec.diagnostic // Add diagnostic field here
+      }))
+    })
   );
 };
 
