@@ -135,11 +135,13 @@ const groupChecks = (checks) => {
       category, 
       specifications: specifications.map(spec => ({
         ...spec,
-        diagnostic: spec.diagnostic // Add diagnostic field here
+        // Include the diagnostic field only if the check has failed
+        diagnostic: spec.status === false ? spec.diagnostic : undefined
       }))
     })
   );
 };
+
 
 const run = () => {
   fs.readFile(reportFile, async (err,data) => {
