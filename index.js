@@ -27,17 +27,14 @@ async function postIssue(checks) {
     owner: owner,
     repo: repo,
     title: checks.header.title,
-    //labels: [checks.header.labels],
     body: checks.rendered,
-    assignees: lastAuthor,
-    //login: 'gradewizard'
+    assignees: lastAuthor
   })
 }
 
 async function updateIssue(checks, id) {
   let teams = await getRepoTeams();
   let lastAuthor = teams.length > 0 ? teams.flat(1) : [await getLatestAuthor()];
-  console.log(checks.rendered);
   let response = await octokit.rest.issues.update({
     owner: owner,
     repo: repo,
