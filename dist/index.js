@@ -20680,7 +20680,6 @@ async function updateIssue(checks, id) {
     body: checks.rendered,
     assignees: lastAuthor
   });
-  console.log(response);
 }
 
 
