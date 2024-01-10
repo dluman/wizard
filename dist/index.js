@@ -20652,8 +20652,9 @@ const octokit = github.getOctokit(
 
 const repo = github.context.payload.repository.name;
 const owner = github.context.payload.repository.owner.login;
+const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
-// Issue with orgBy here -- trouble making this principle dynamic?
+// TODO: Implment orgBy (future release)
 const orgBy = core.getInput('organizing-key');
 const reportFile = core.getInput('grader-report');
 
