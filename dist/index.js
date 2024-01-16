@@ -20656,6 +20656,7 @@ try {
   const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 } catch {
   // TODO: Fix this, but for now die silently
+  process.exit();
 }
 
 // TODO: Implment orgBy (future release)
@@ -20800,6 +20801,7 @@ try{
   run();
 } catch {
   // Pass blissfully.
+  process.exit();
 }
 
 })();
