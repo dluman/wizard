@@ -20644,15 +20644,19 @@ const util = __nccwpck_require__(3837);
 const async = __nccwpck_require__(9786);
 const yaml = __nccwpck_require__(1100);
 
-const Mustache = __nccwpck_require__(7907);
+try {
+  const Mustache = __nccwpck_require__(7907);
 
-const octokit = github.getOctokit(
-  process.env.GITHUB_TOKEN
-);
+  const octokit = github.getOctokit(
+    process.env.GITHUB_TOKEN
+  );
 
-const repo = github.context.payload.repository.name;
-const owner = github.context.payload.repository.owner.login;
-const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
+  const repo = github.context.payload.repository.name;
+  const owner = github.context.payload.repository.owner.login;
+  const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
+} catch {
+  // TODO: Fix this, but for now die silently
+}
 
 // TODO: Implment orgBy (future release)
 const orgBy = core.getInput('organizing-key');

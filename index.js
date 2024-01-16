@@ -7,15 +7,19 @@ const util = require('util');
 const async = require('async');
 const yaml = require('js-yaml');
 
-const Mustache = require('mustache');
+try {
+  const Mustache = require('mustache');
 
-const octokit = github.getOctokit(
-  process.env.GITHUB_TOKEN
-);
+  const octokit = github.getOctokit(
+    process.env.GITHUB_TOKEN
+  );
 
-const repo = github.context.payload.repository.name;
-const owner = github.context.payload.repository.owner.login;
-const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
+  const repo = github.context.payload.repository.name;
+  const owner = github.context.payload.repository.owner.login;
+  const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
+} catch {
+  // TODO: Fix this, but for now die silently
+}
 
 // TODO: Implment orgBy (future release)
 const orgBy = core.getInput('organizing-key');
