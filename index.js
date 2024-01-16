@@ -155,4 +155,8 @@ const run = () => {
   });
 };
 
-run();
+try{
+  run();
+} catch {
+  // Pass blissfully.
+}
