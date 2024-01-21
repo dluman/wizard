@@ -20740,6 +20740,7 @@ const loadAndRenderTemplate = async (checks) => {
     /---[a-zA-Z:'\s]+---/,''
   ).trim()
   let rendered = Mustache.render(body, checks);
+  console.log(rendered);
   return {
     header: header,
     rendered: rendered
@@ -20753,7 +20754,6 @@ const getGradeIssue = async (template) => {
     repo: repo
   });
   for(let issue of issues.data) {
-    console.log(`${issue.title}: ${issueTitle}`);
     if(issue.title == issueTitle)
       return issue.number;
   }
@@ -20775,9 +20775,7 @@ const groupChecks = (checks) => {
 const run = () => {
   fs.readFile(reportFile, async (err,data) => {
     let report = JSON.parse(data);
-    console.log(report)
     // Render the template
-    report.checks.pct_complete = report.percentage_score;
     const template = await loadAndRenderTemplate({
       checks: groupChecks(report.checks),
       outcome: {
@@ -20787,7 +20785,6 @@ const run = () => {
 
     // Discover previously-created issues
     const issue = await getGradeIssue(template);
-    console.log(report.checks);
     // Update the issue if necessary
     if (!issue) postIssue(template);
     else updateIssue(template, issue);
