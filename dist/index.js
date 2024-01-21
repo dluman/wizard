@@ -20776,6 +20776,7 @@ const run = () => {
   fs.readFile(reportFile, async (err,data) => {
     let report = JSON.parse(data);
     // Render the template
+    report.checks.percentage_score = report.percentage_score;
     const template = await loadAndRenderTemplate({
       checks: groupChecks(report.checks),
       outcome: {
