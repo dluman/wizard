@@ -20753,6 +20753,7 @@ const getGradeIssue = async (template) => {
     repo: repo
   });
   for(let issue of issues.data) {
+    console.log(`${issue.title}: ${issueTitle}`);
     if(issue.title == issueTitle)
       return issue.number;
   }
