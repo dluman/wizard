@@ -25,6 +25,7 @@ try {
 // TODO: Implment orgBy (future release)
 const orgBy = core.getInput('organizing-key');
 const reportFile = core.getInput('grader-report');
+const issueName = core.getInput('report-name');
 
 async function postIssue(checks) {
   let teams = await getRepoTeams();
@@ -32,7 +33,7 @@ async function postIssue(checks) {
   let isCreated = await octokit.rest.issues.create({
     owner: owner,
     repo: repo,
-    title: checks.header.title,
+    title: issueName || checks.header.title,
     body: checks.rendered,
     assignees: lastAuthor
   })
@@ -49,7 +50,6 @@ async function updateIssue(checks, id) {
     assignees: lastAuthor
   });
 }
-
 
 const getLatestAuthor = async () => {
   let info = await octokit.rest.repos.listCommits({
@@ -143,6 +143,7 @@ const run = () => {
     let report = JSON.parse(data);
 
     // Render the template
+    report.checks.pct_complete = report.pct_complete;
     const template = await loadAndRenderTemplate({
       checks: groupChecks(report.checks),
       outcome: {
