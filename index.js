@@ -103,7 +103,6 @@ const loadAndRenderTemplate = async (checks) => {
     /---[a-zA-Z:'\s]+---/,''
   ).trim()
   let rendered = Mustache.render(body, checks);
-  console.log(checks);
   return {
     header: header,
     rendered: rendered
@@ -144,7 +143,8 @@ const run = () => {
       checks: groupChecks(report.checks),
       outcome: {
         todos: true ? report.percentage_score === 100 : false,
-      },
+        pct: report.percentage_score
+        },
     });
 
     // Discover previously-created issues
