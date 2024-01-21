@@ -20776,7 +20776,7 @@ const run = () => {
     let report = JSON.parse(data);
     console.log(report)
     // Render the template
-    report.checks.pct_complete = report.pct_complete;
+    report.checks.pct_complete = report.percentage_score;
     const template = await loadAndRenderTemplate({
       checks: groupChecks(report.checks),
       outcome: {
