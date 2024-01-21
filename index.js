@@ -157,9 +157,9 @@ const run = () => {
   });
 };
 
-try{
+//try{
   run();
-} catch {
+//} catch {
   // Pass blissfully.
-  process.exit();
-}
+//  process.exit();
+//}
