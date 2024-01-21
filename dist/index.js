@@ -20654,7 +20654,6 @@ const repo = github.context.payload.repository.name;
 const owner = github.context.payload.repository.owner.login;
 const loadFile = (filename) => util.promisify(fs.readFile)(filename, 'utf8');
 
-
 // TODO: Implment orgBy (future release)
 const orgBy = core.getInput('organizing-key');
 const reportFile = core.getInput('grader-report');
@@ -20748,12 +20747,13 @@ const loadAndRenderTemplate = async (checks) => {
 }
 
 const getGradeIssue = async (template) => {
+  let issueTitle = issueName || template.header.title;
   let issues = await octokit.rest.issues.listForRepo({
     owner: owner,
     repo: repo
   });
   for(let issue of issues.data) {
-    if(issue.title == template.header.title)
+    if(issue.title == issueTitle)
       return issue.number;
   }
 }
@@ -20786,7 +20786,7 @@ const run = () => {
 
     // Discover previously-created issues
     const issue = await getGradeIssue(template);
-
+    console.log(checks);
     // Update the issue if necessary
     if (!issue) postIssue(template);
     else updateIssue(template, issue);
@@ -20794,12 +20794,12 @@ const run = () => {
   });
 };
 
-try{
+//try{
   run();
-} catch {
+//} catch {
   // Pass blissfully.
-  process.exit();
-}
+//  process.exit();
+//}
 
 })();
 
