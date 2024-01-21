@@ -103,7 +103,7 @@ const loadAndRenderTemplate = async (checks) => {
     /---[a-zA-Z:'\s]+---/,''
   ).trim()
   let rendered = Mustache.render(body, checks);
-  console.log(rendered);
+  console.log(checks);
   return {
     header: header,
     rendered: rendered
