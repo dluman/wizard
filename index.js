@@ -137,7 +137,7 @@ const groupChecks = (checks) => {
 const run = () => {
   fs.readFile(reportFile, async (err,data) => {
     let report = JSON.parse(data);
-
+    console.log(report)
     // Render the template
     report.checks.pct_complete = report.pct_complete;
     const template = await loadAndRenderTemplate({
