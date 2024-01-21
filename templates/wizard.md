@@ -33,4 +33,4 @@ Based on the GatorGrader report for this run, here's a summary of what you've go
 
 ## Percent complete
 
-Based on the checks achieved, this assignment is `{{#checks}}{{pct}}{{/checks}}%` complete.
+Based on the checks achieved, this assignment is `{{#checks}}{{pct_complete}}{{/checks}}%` complete.

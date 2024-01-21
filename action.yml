@@ -16,6 +16,9 @@ inputs:
   grader-report:
     description: JSON file to expect from the gatorgrade --report flag
     required: true
+  report-name:
+    descroption: Customized issue name; independent of template header name
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'
