@@ -1,8 +1,8 @@
 ---
-name: wizard
+name: Wizard
 about: Template for Wizard reports
-title: 'Assignment Progress'
-labels: 'bug'
+title: Assignment Progress
+labels: bug
 assignees: ''
 
 ---
@@ -26,6 +26,7 @@ Based on the GatorGrader report for this run, here's a summary of what you've go
 {{#description}}
 - [{{#status}}x{{/status}}{{^status}} {{/status}}] {{.}}
 {{/description}}
+{{#diagnostic}}- {{diagnostic}} {{/diagnostic}}
 {{/specifications}}
 {{/category}}
 
@@ -33,4 +34,4 @@ Based on the GatorGrader report for this run, here's a summary of what you've go
 
 ## Percent complete
 
-Based on the checks achieved, this assignment is `{{#checks}}{{pct_complete}}{{/checks}}%` complete.
+Based on the checks achieved, this assignment is `{{#outcome}}{{pct}}{{/outcome}}%` complete.
