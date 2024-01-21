@@ -20786,7 +20786,7 @@ const run = () => {
 
     // Discover previously-created issues
     const issue = await getGradeIssue(template);
-    console.log(checks);
+    console.log(report.checks);
     // Update the issue if necessary
     if (!issue) postIssue(template);
     else updateIssue(template, issue);
