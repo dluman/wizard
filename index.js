@@ -50,9 +50,9 @@ const getLatestAuthor = async () => {
   let info = await octokit.rest.repos.listCommits({
     owner: owner,
     repo: repo,
-    sha: process.env.ref_name
+    sha: process.env.GITHUB_REF_NAME
   });
-  console.log(process.env.ref_name);
+  console.log(process.env.GITHUB_REF_NAME);
   return info.data[0].author.login;
 };
 
