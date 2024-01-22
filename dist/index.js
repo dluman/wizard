@@ -20686,7 +20686,8 @@ async function updateIssue(checks, id) {
 const getLatestAuthor = async () => {
   let info = await octokit.rest.repos.listCommits({
     owner: owner,
-    repo: repo
+    repo: repo,
+    sha: process.env.ref_name
   });
   return info.data[0].author.login;
 };
