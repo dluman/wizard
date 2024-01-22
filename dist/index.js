@@ -20663,6 +20663,7 @@ const issueName = core.getInput('report-name');
 async function postIssue(checks) {
   let teams = await getRepoTeams();
   let lastAuthor = teams.length > 0 ? teams.flat(1) : [await getLatestAuthor()];
+  console.log(lastAuthor);
   let isCreated = await octokit.rest.issues.create({
     owner: owner,
     repo: repo,
