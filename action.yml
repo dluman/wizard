@@ -20,5 +20,5 @@ inputs:
     description: Customized issue name; independent of template header name
     required: false
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
