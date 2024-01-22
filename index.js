@@ -1,3 +1,4 @@
+
 const core = require('@actions/core');
 const github = require('@actions/github');
 
@@ -52,6 +53,8 @@ const getLatestAuthor = async () => {
     repo: repo,
     sha: process.env.GITHUB_REF_NAME
   });
+  console.log(process.env.GITHUB_REF_NAME);
+  console.log(info);
   return info.data[0].author.login;
 };
 

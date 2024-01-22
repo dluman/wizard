@@ -20635,6 +20635,7 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
+
 const core = __nccwpck_require__(7294);
 const github = __nccwpck_require__(2621);
 
@@ -20690,6 +20691,7 @@ const getLatestAuthor = async () => {
     sha: process.env.GITHUB_REF_NAME
   });
   console.log(process.env.GITHUB_REF_NAME);
+  console.log(info);
   return info.data[0].author.login;
 };
 
