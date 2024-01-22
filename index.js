@@ -52,6 +52,7 @@ const getLatestAuthor = async () => {
     repo: repo,
     sha: process.env.ref_name
   });
+  console.log(process.env.ref_name);
   return info.data[0].author.login;
 };
 
