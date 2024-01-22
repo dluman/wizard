@@ -52,7 +52,6 @@ const getLatestAuthor = async () => {
     repo: repo,
     sha: process.env.GITHUB_REF_NAME
   });
-  console.log(process.env.GITHUB_REF_NAME);
   return info.data[0].author.login;
 };
 
