@@ -38,7 +38,6 @@ async function postIssue(checks) {
 async function updateIssue(checks, id) {
   let teams = await getRepoTeams();
   let lastAuthor = teams.length > 0 ? teams.flat(1) : [await getLatestAuthor()];
-  console.log(`THIS IS LAST AUTHOR: ${lastAuthor}`);
   let response = await octokit.rest.issues.update({
     owner: owner,
     repo: repo,
